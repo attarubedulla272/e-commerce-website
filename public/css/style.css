@@ -1,0 +1,461 @@
+/* Navbar styling */
+.navbar {
+    height: 5rem;
+    background-color: white;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    z-index: 100;
+}
+
+.fa-shopping-cart {
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link {
+    color: #222222 !important;
+}
+
+/* Footer styling */
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+.f-info-links, .f-info-social {
+    width: 100%;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+.f-info-social, .f-info-brand {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.f-info-social i {
+    margin-right: 1rem;
+}
+.f-info {
+    height: 8rem;
+    background-color: #ebebeb;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-evenly;
+}
+
+/* Social icon effect */
+.fa-brands {
+    font-size: 25px;
+}
+.fa-brands:hover {
+    font-size: 35px;
+}
+
+/* Card styling */
+.card, .card[class], .card.h-100, .card-body, .card * {
+    border: none !important;
+    box-shadow: none !important;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.card-img-top {
+    border-radius: 10px !important;
+    border-top-right-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+.card-body {
+    padding: 0 !important;
+}
+
+/* Star rating */
+.star-rating {
+    display: inline-flex;
+    cursor: pointer;
+}
+.star {
+    font-size: 1.6rem;
+    color: #ccc;
+    transition: color 0.2s;
+    padding: 0 2px;
+}
+.star.active {
+    color: gold;
+}
+
+/* Card hover overlay (if using image-wrapper) */
+.image-wrapper {
+    position: relative;
+}
+.overlay-effect {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0);
+    transition: background-color 0.3s ease;
+}
+.image-wrapper:hover .overlay-effect {
+    background-color: rgba(255,255,255,0.4);
+}
+
+/* Action buttons styling */
+.action-buttons-container {
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-edit:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+}
+
+.btn-edit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-edit:hover::before {
+    left: 100%;
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    color: white;
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+}
+
+.btn-delete:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-delete:hover::before {
+    left: 100%;
+}
+
+/* Small delete button for reviews */
+.btn-delete-small {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-delete-small:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+    color: white;
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+}
+
+.btn-delete-small:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete-small::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-delete-small:hover::before {
+    left: 100%;
+}
+
+/* Simple Buy Button Styling */
+.simple-buy-container {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    margin: 1rem 0;
+}
+
+/* Buy and Wishlist Container Styling */
+.buy-wishlist-container {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin: 1rem 0;
+}
+
+.buy-wishlist-container .btn {
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-wishlist-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.buy-wishlist-container .btn:active {
+    transform: translateY(0);
+}
+
+.buy-wishlist-container .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.buy-wishlist-container .btn:hover::before {
+    left: 100%;
+}
+
+/* Product specific styles */
+.price {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 1.1rem;
+}
+.original-price {
+    text-decoration: line-through;
+    color: #95a5a6;
+    margin-right: 10px;
+}
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    z-index: 10;
+}
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    z-index: 10;
+}
+
+/* Remove previous custom search bar styles and add only a subtle focus effect */
+.input-group {
+    background: linear-gradient(90deg, #f8fafc 0%, #e3e6ed 100%);
+    border-radius: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1.5px solid #e0e4ea;
+    transition: box-shadow 0.25s, background 0.25s, border 0.25s, transform 0.18s;
+    padding: 0.15rem 0.15rem 0.15rem 0.4rem;
+}
+.input-group:focus-within {
+    box-shadow: 0 6px 24px rgba(0,123,255,0.18), 0 0 0 3px #cce6ff;
+    background: linear-gradient(90deg, #f0f7ff 0%, #e3e6ed 100%);
+    border-color: #80bdff;
+    transform: scale(1.025);
+}
+.input-group .form-control {
+    border: none;
+    background: transparent;
+    border-radius: 32px 0 0 32px;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    font-size: 1.08rem;
+    height: 2.6rem;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+.input-group .form-control:focus {
+    background: #f0f8ff;
+    box-shadow: none;
+    border-color: #80bdff;
+}
+.input-group .btn-primary {
+    border-radius: 0 32px 32px 0;
+    font-weight: 700;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+    font-size: 1.08rem;
+    height: 2.6rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.18s;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.07);
+}
+.input-group .btn-primary:hover, .input-group .btn-primary:focus {
+    background: linear-gradient(90deg, #0056b3 0%, #007bff 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0,123,255,0.18);
+    transform: scale(1.06);
+}
+.input-group .btn-primary:active {
+    transform: scale(0.97);
+}
+
+.sell-product-link {
+    color: #fff !important;
+    background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+    border-radius: 25px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(221,36,118,0.10);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.sell-product-link:hover, .sell-product-link:focus {
+    background: linear-gradient(90deg, #dd2476 0%, #ff512f 100%);
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(221,36,118,0.18);
+    text-decoration: none;
+}
+.input-group-text {
+    background: transparent;
+    border: none;
+    color: #adb5bd;
+    font-size: 1.1rem;
+}
+
+/* Enhanced Prominent Log out button in user dropdown */
+.dropdown-menu .dropdown-item.text-danger {
+  background: #e74c3c;
+  color: #fff !important;
+  border-radius: 12px;
+  font-weight: 800;
+  margin-top: 1rem;
+  padding: 0.85rem 1.5rem;
+  text-align: center;
+  font-size: 1.13rem;
+  box-shadow: 0 4px 18px rgba(231,76,60,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.2s;
+}
+.dropdown-menu .dropdown-item.text-danger:hover,
+.dropdown-menu .dropdown-item.text-danger:focus {
+  background: #c0392b;
+  color: #fff !important;
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(192,57,43,0.18);
+}
+
+/* Ultra-Compact Log out button in user dropdown */
+.dropdown-menu .logout-btn {
+  background: #e74c3c;
+  color: #fff !important;
+  border-radius: 5px;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  padding: 0.18rem 0.45rem;
+  text-align: center;
+  font-size: 0.78rem;
+  box-shadow: none;
+  border: 1px solid #e74c3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  letter-spacing: 0.1px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.12s, color 0.12s, transform 0.10s, border 0.12s;
+}
+.dropdown-menu .logout-btn:hover,
+.dropdown-menu .logout-btn:focus {
+  background: #c0392b;
+  color: #fff !important;
+  transform: scale(1.01);
+  border: 1px solid #c0392b;
+}
+.dropdown-menu .logout-btn i {
+  font-size: 0.78em;
+  margin-right: 0.1em;
+  transition: none;
+}

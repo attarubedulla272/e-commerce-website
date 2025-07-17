@@ -1,0 +1,154 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<style>
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .filter {
+    text-align: center;
+    margin-right: 2rem;
+    margin-top: 2rem;
+    opacity: 0.7;
+    text-decoration: none;
+    color: inherit;
+  }
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+  .filter.active {
+    opacity: 1;
+    border-bottom: 2px solid #007bff;
+  }
+  .filter p {
+    font-size: 0.8rem;
+  }
+  .price {
+    font-weight: bold;
+    color: #e74c3c;
+  }
+  .original-price {
+    text-decoration: line-through;
+    color: #95a5a6;
+    margin-right: 10px;
+  }
+  .stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+  }
+  .search-results {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    background: #e3f2fd;
+    border-radius: 5px;
+    border-left: 4px solid #2196f3;
+  }
+</style>
+
+<!-- Search Results Info -->
+<% if (searchQuery) { %>
+  <div class="search-results">
+    <strong>Search Results for: "<%= searchQuery %>"</strong>
+    <span class="text-muted">(<%= allProducts.length %> products found)</span>
+    <a href="/listings" class="btn btn-sm btn-outline-secondary ms-3">
+      <i class="fa-solid fa-times"></i> Clear Search
+    </a>
+  </div>
+<% } %>
+
+<div id="filters">
+  <a href="/listings" class="filter <%= !currentCategory ? 'active' : '' %>">
+    <div><i class="fa-solid fa-list"></i></div><p>All</p>
+  </a>
+  <a href="/listings/category/Electronics" class="filter <%= currentCategory === 'Electronics' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-mobile-alt"></i></div><p>Electronics</p>
+  </a>
+  <a href="/listings/category/Clothing" class="filter <%= currentCategory === 'Clothing' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-tshirt"></i></div><p>Clothing</p>
+  </a>
+  <a href="/listings/category/Home & Garden" class="filter <%= currentCategory === 'Home & Garden' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-home"></i></div><p>Home & Garden</p>
+  </a>
+  <a href="/listings/category/Sports" class="filter <%= currentCategory === 'Sports' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-futbol"></i></div><p>Sports</p>
+  </a>
+  <a href="/listings/category/Books" class="filter <%= currentCategory === 'Books' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-book"></i></div><p>Books</p>
+  </a>
+  <a href="/listings/category/Beauty & Health" class="filter <%= currentCategory === 'Beauty & Health' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-spa"></i></div><p>Beauty & Health</p>
+  </a>
+  <a href="/listings/category/Toys & Games" class="filter <%= currentCategory === 'Toys & Games' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-gamepad"></i></div><p>Toys & Games</p>
+  </a>
+  <a href="/listings/category/Automotive" class="filter <%= currentCategory === 'Automotive' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-car"></i></div><p>Automotive</p>
+  </a>
+  <a href="/listings/category/Jewelry" class="filter <%= currentCategory === 'Jewelry' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-gem"></i></div><p>Jewelry</p>
+  </a>
+  <a href="/listings/category/Pet Supplies" class="filter <%= currentCategory === 'Pet Supplies' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-paw"></i></div><p>Pet Supplies</p>
+  </a>
+  <a href="/listings/category/Office Supplies" class="filter <%= currentCategory === 'Office Supplies' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-briefcase"></i></div><p>Office Supplies</p>
+  </a>
+  <a href="/listings/category/Baby Products" class="filter <%= currentCategory === 'Baby Products' ? 'active' : '' %>">
+    <div><i class="fa-solid fa-baby"></i></div><p>Baby Products</p>
+  </a>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mt-3">
+  <% if (allProducts.length === 0) { %>
+    <div class="col-12 text-center">
+      <div class="alert alert-info">
+        <i class="fa-solid fa-search"></i>
+        <% if (searchQuery) { %>
+          No products found for "<%= searchQuery %>". Try a different search term.
+        <% } else { %>
+          No products available in this category.
+        <% } %>
+      </div>
+    </div>
+  <% } else { %>
+    <% for(let product of allProducts) { %>
+      <div class="col">
+        <div class="card h-100" style="border: none !important;">
+          <div class="image-wrapper position-relative">
+            <a href="/listings/<%= product._id %>/show">
+              <img
+                src="<%= product.images && product.images.length > 0 ? product.images[0].url : 'https://via.placeholder.com/300x200?text=No+Image' %>"
+                class="card-img-top" style="height: 20rem; object-fit: cover;" alt="product_image">
+              <div class="card-img-overlay overlay-effect"></div>
+              <% if (product.stock <= 10 && product.stock > 0) { %>
+                <div class="stock-badge">Only <%= product.stock %> left!</div>
+              <% } else if (product.stock === 0) { %>
+                <div class="stock-badge" style="background: rgba(231, 76, 60, 0.9);">Out of Stock</div>
+              <% } %>
+            </a>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <% if (product.brand) { %>
+              <p class="text-muted mb-1"><small><%= product.brand %></small></p>
+            <% } %>
+            <div class="mb-2">
+              <% if (product.originalPrice > product.price) { %>
+                <span class="original-price">₹<%= product.originalPrice.toLocaleString("en-IN") %></span>
+              <% } %>
+              <span class="price">₹<%= product.price.toLocaleString("en-IN") %></span>
+            </div>
+            <p class="text-muted mb-0"><%= product.category %></p>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  <% } %>
+</div>

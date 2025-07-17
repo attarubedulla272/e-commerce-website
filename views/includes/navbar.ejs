@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-shopping-cart"></i> ShopHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <!-- Shop link removed -->
+      </div>
+      
+      <div class="navbar-nav ms-auto align-items-center">
+        <!-- Search Bar -->
+        <form class="d-flex align-items-center me-4" method="GET" action="/listings/search" style="max-width: 350px;">
+          <div class="input-group">
+            <span class="input-group-text bg-transparent border-0 ps-2" style="font-size:1.1rem; color:#adb5bd;">
+              <i class="fa-solid fa-search"></i>
+            </span>
+            <input type="search" class="form-control" name="q" placeholder="Search products..." aria-label="Search">
+            <button class="btn btn-primary" type="submit">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </form>
+        <a class="nav-link fw-bold sell-product-link text-uppercase px-3" href="/listings/new">Sell Product</a>
+        <% if (currentUser) { %>
+          <a class="nav-link ms-2" href="/cart" title="My Wishlist">
+            <i class="fas fa-heart"></i>
+            <span class="badge bg-danger ms-1" id="wishlist-count">0</span>
+          </a>
+        <% } else { %>
+          <a class="nav-link ms-2" href="/login" title="Login to view wishlist">
+            <i class="fas fa-heart"></i>
+            <span class="badge bg-secondary ms-1">0</span>
+          </a>
+        <% } %>
+        <% if (!currentUser) { %>
+          <a class="nav-link ms-2" href="/signup"><b>Signup </b></a>
+          <a class="nav-link ms-2" href="/login"><b>Login </b></a>
+        <% } %>
+        <% if (currentUser) { %>
+          <div class="dropdown">
+            <button class="btn btn-link nav-link ms-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item logout-btn d-flex align-items-center justify-content-center text-danger fw-semibold" href="/logout">
+                  <span class="me-3" style="font-size:1.5em;display:flex;align-items:center;"><i class="fa-solid fa-sign-out-alt"></i></span>
+                  <span style="font-size:1.13em;">Log out</span>
+                  <span class="ms-3" style="font-size:1.2em;color:#fff;opacity:0.7;"><i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+// Function to update wishlist count
+async function updateWishlistCount() {
+    try {
+        const response = await fetch('/cart/count');
+        
+        if (response.ok) {
+            const data = await response.json();
+            const countElement = document.getElementById('wishlist-count');
+            if (countElement) {
+                countElement.textContent = data.count || 0;
+                
+                // Add animation if count changes
+                if (data.count > 0) {
+                    countElement.style.transform = 'scale(1.2)';
+                    countElement.style.transform = 'scale(1)';
+                }
+            }
+        } else {
+            const countElement = document.getElementById('wishlist-count');
+            if (countElement) {
+                countElement.textContent = '0';
+            }
+        }
+    } catch (error) {
+        console.error('Error updating wishlist count:', error);
+        const countElement = document.getElementById('wishlist-count');
+        if (countElement) {
+            countElement.textContent = '0';
+        }
+    }
+}
+
+// Update count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateWishlistCount();
+});
+</script>

@@ -1,0 +1,403 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card border-0 shadow-lg" style="border-radius: 15px;">
+      <!-- Add this just above the main payment card -->
+      <div class="payment-details-header">
+        <h2><i class="fas fa-credit-card me-2"></i>Payment Details</h2>
+      </div>
+
+      <!-- Product Summary -->
+      <div class="product-summary mb-4 p-3 bg-light rounded">
+        <h5 class="mb-3">Order Summary</h5>
+        <div class="row">
+          <div class="col-md-3">
+            <% if (listing.images && listing.images.length > 0) { %>
+              <img src="<%= listing.images[0].url %>" class="img-fluid rounded" alt="Product Image">
+            <% } else { %>
+              <img src="https://via.placeholder.com/150x150?text=No+Image" class="img-fluid rounded" alt="No Image">
+            <% } %>
+          </div>
+          <div class="col-md-9">
+            <h6 class="mb-2"><%= listing.name %></h6>
+            <p class="text-muted mb-2">Sold by: <%= listing.seller && listing.seller.username ? listing.seller.username : 'ShopHub' %></p>
+            <p class="mb-2"><%= listing.description %></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="h5 text-success mb-0">₹<%= listing.price.toLocaleString("en-IN") %></span>
+              <span class="badge bg-success">In Stock (<%= listing.stock %> available)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <form action="/payment/<%= listing._id %>/process" method="POST" class="needs-validation" novalidate>
+        <div class="row">
+          <div class="col-md-8">
+            <h5 class="mb-3">Payment Information</h5>
+            
+            <!-- Payment Method -->
+            <div class="mb-4">
+              <label class="form-label">Payment Method</label>
+              <div class="payment-methods">
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="credit" checked required>
+                  <label class="form-check-label" for="creditCard">
+                    <i class="fas fa-credit-card me-2"></i>Credit/Debit Card
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="paymentMethod" id="upi" value="upi">
+                  <label class="form-check-label" for="upi">
+                    <i class="fas fa-mobile-alt me-2"></i>UPI
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Details -->
+            <div class="row">
+              <div class="col-md-12 mb-4">
+                <label for="cardNumber" class="form-label">Card Number</label>
+                <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+                <div class="invalid-feedback">
+                  Please enter a valid card number.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="expiryDate" class="form-label">Expiry Date</label>
+                <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+                <div class="invalid-feedback">
+                  Please enter expiry date.
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <label for="cvv" class="form-label">CVV</label>
+                <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123" required>
+                <div class="invalid-feedback">
+                  Please enter CVV.
+                </div>
+              </div>
+            </div>
+
+            <!-- Billing Address -->
+            <div class="mb-4">
+              <label for="billingAddress" class="form-label">Billing Address</label>
+              <textarea class="form-control" id="billingAddress" name="billingAddress" rows="4" placeholder="Enter your complete billing address" required></textarea>
+              <div class="invalid-feedback">
+                Please enter billing address.
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary Sidebar -->
+          <div class="col-md-4">
+            <div class="card border-0 bg-light">
+              <div class="card-body">
+                <h6 class="card-title mb-3">Order Total</h6>
+                
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Product Price:</span>
+                  <span>₹<%= listing.price.toLocaleString("en-IN") %></span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Shipping:</span>
+                  <span>₹50</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Tax:</span>
+                  <span>₹<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %></span>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-3">
+                  <strong>Total:</strong>
+                  <strong class="text-success">₹<%= (listing.price + 50 + Math.round(listing.price * 0.18)).toLocaleString("en-IN") %></strong>
+                </div>
+                
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="fas fa-lock me-2"></i>Pay Securely
+                </button>
+                
+                <div class="text-center mt-3">
+                  <span class="security-badge">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    SSL Secured Payment
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.payment-details-header {
+  background: linear-gradient(90deg, #0d6efd 60%, #4f8cff 100%);
+  color: #fff;
+  border-radius: 18px 18px 0 0;
+  text-align: center;
+  padding: 1.3rem 0 1.1rem 0;
+  margin: -2rem -2rem 2rem -2rem;
+  box-shadow: 0 2px 12px rgba(13,110,253,0.10);
+  position: relative;
+  z-index: 2;
+}
+.payment-details-header h2 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.payment-details-header i {
+  font-size: 1.4em;
+  margin-right: 0.5em;
+}
+.payment-main-bg {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(60,60,90,0.10);
+  padding: 2.5rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.product-summary {
+  border: 1.5px solid #e9ecef;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.2rem 1rem;
+}
+.product-summary img {
+  border: 2px solid #e9ecef;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  border-radius: 12px;
+  background: #fff;
+}
+.form-control, .form-select {
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-size: 1.13rem;
+  border: 2px solid #dee2e6;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.18rem rgba(13, 110, 253, 0.13);
+}
+.card {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(60,60,90,0.13) !important;
+  border: 2px solid #e9ecef !important;
+  background: #fff !important;
+}
+.card-header.bg-primary {
+  background: linear-gradient(90deg, #0d6efd 60%, #4f8cff 100%) !important;
+  border-radius: 16px 16px 0 0 !important;
+  box-shadow: 0 2px 12px rgba(13,110,253,0.08);
+}
+.btn-success {
+  background: linear-gradient(90deg, #28a745 0%, #218838 100%);
+  border: none;
+  font-weight: 800;
+  border-radius: 14px;
+  padding: 18px 0;
+  font-size: 1.18rem;
+  transition: background 0.22s, box-shadow 0.22s, transform 0.18s;
+  box-shadow: 0 4px 18px rgba(40, 167, 69, 0.13);
+  letter-spacing: 0.7px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-success:hover {
+  background: linear-gradient(90deg, #218838 0%, #28a745 100%);
+  box-shadow: 0 8px 32px rgba(40, 167, 69, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+@media (max-width: 767px) {
+  .payment-details-header {
+    margin: -1rem -0.5rem 1.2rem -0.5rem;
+    border-radius: 12px 12px 0 0;
+    font-size: 1.2rem;
+    padding: 1rem 0 0.7rem 0;
+  }
+  .payment-main-bg {
+    padding: 1.1rem 0.4rem;
+    border-radius: 12px;
+  }
+  .product-summary {
+    padding: 1rem 0.5rem;
+    border-radius: 10px;
+  }
+  .card {
+    border-radius: 10px !important;
+  }
+}
+/* Payment Form Styling */
+.form-control, .form-select {
+  border: 2px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 12px 15px !important;
+  font-size: 16px !important;
+  transition: all 0.3s ease;
+  background-color: #ffffff !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+  outline: none !important;
+}
+
+.form-control:hover, .form-select:hover {
+  border-color: #adb5bd !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.form-label {
+  font-weight: 600 !important;
+  color: #495057 !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.form-control::placeholder {
+  color: #6c757d !important;
+  opacity: 0.7 !important;
+}
+
+.btn-success {
+  transition: all 0.3s ease;
+  border: none !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 12px 20px !important;
+  border-radius: 10px !important;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.card {
+  border: 1px solid #e9ecef !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.invalid-feedback {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #dc3545 !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+  font-size: 13px !important;
+}
+
+.form-check-input {
+  border: 2px solid #dee2e6 !important;
+  transition: all 0.3s ease;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.form-check-label {
+  font-weight: 500 !important;
+  color: #495057 !important;
+  cursor: pointer !important;
+}
+
+.product-summary {
+  border: 2px solid #e9ecef !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.bg-light {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border-radius: 12px !important;
+}
+
+/* Payment method styling */
+.payment-methods {
+  border: 2px solid #e9ecef !important;
+  border-radius: 10px !important;
+  padding: 15px !important;
+  background: #ffffff !important;
+}
+
+/* Security badge styling */
+.security-badge {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+</style>
+
+<script>
+// Form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+// Card number formatting
+document.getElementById('cardNumber').addEventListener('input', function(e) {
+  let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+  let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+  e.target.value = formattedValue;
+});
+
+// Expiry date formatting
+document.getElementById('expiryDate').addEventListener('input', function(e) {
+  let value = e.target.value.replace(/\D/g, '');
+  if (value.length >= 2) {
+    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+  }
+  e.target.value = value;
+});
+
+// CVV formatting
+document.getElementById('cvv').addEventListener('input', function(e) {
+  e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+});
+</script> 

@@ -1,0 +1,241 @@
+<% layout("layouts/boilerplate.ejs") -%>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card mb-4 border-0">
+      <h2 class="text-center mt-3"><%= product.name %></h2>
+      
+      <!-- Image Carousel -->
+      <div id="productCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <% if (product.images && product.images.length > 0) { %>
+            <% product.images.forEach((image, index) => { %>
+              <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                <img src="<%= image.url %>" class="d-block w-100" style="max-height: 400px; object-fit: cover;" alt="Product Image">
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="carousel-item active">
+              <img src="https://via.placeholder.com/600x400?text=No+Image" class="d-block w-100" style="max-height: 400px; object-fit: cover;" alt="No Image">
+            </div>
+          <% } %>
+        </div>
+        <% if (product.images && product.images.length > 1) { %>
+          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        <% } %>
+      </div>
+
+      <div class="card-body">
+        <p><i>Sold by: <%= product.seller && product.seller.username ? product.seller.username : 'ShopHub' %></i></p>
+        <p class="card-text mb-2"><%= product.description %></p>
+        
+        <!-- Pricing -->
+        <div class="mb-3">
+          <% if (product.originalPrice > product.price) { %>
+            <span class="text-muted text-decoration-line-through">₹<%= product.originalPrice.toLocaleString("en-IN") %></span>
+            <span class="h4 text-danger ms-2">₹<%= product.price.toLocaleString("en-IN") %></span>
+            <span class="badge bg-success ms-2">
+              <%= Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) %>% OFF
+            </span>
+          <% } else { %>
+            <span class="h4 text-danger">₹<%= product.price.toLocaleString("en-IN") %></span>
+          <% } %>
+        </div>
+
+        <!-- Stock Status -->
+        <div class="mb-3">
+          <% if (product.stock > 0) { %>
+            <span class="badge bg-success">In Stock (<%= product.stock %> available)</span>
+          <% } else { %>
+            <span class="badge bg-danger">Out of Stock</span>
+          <% } %>
+        </div>
+
+        <% if (product.brand) { %>
+          <p class="mb-2"><strong>Brand:</strong> <%= product.brand %></p>
+        <% } %>
+        
+        <p class="mb-3">
+          <span class="badge bg-secondary">Category: <%= product.category || 'Uncategorized' %></span>
+        </p>
+
+        <!-- Buy and Wishlist Buttons -->
+        <div class="buy-wishlist-container mb-4">
+          <% if (product.stock > 0) { %>
+            <% if (currentUser) { %>
+              <button class="btn btn-success btn-lg w-100 mb-3" onclick="proceedToPayment('<%= product._id %>', '<%= product.price %>')">
+                <i class="fas fa-shopping-cart me-2"></i>Buy Now - ₹<%= product.price.toLocaleString("en-IN") %>
+              </button>
+            <% } else { %>
+              <a href="/login?redirect=/listings/<%= product._id %>" class="btn btn-success btn-lg w-100 mb-3">
+                <i class="fas fa-shopping-cart me-2"></i>Login to Buy - ₹<%= product.price.toLocaleString("en-IN") %>
+              </a>
+            <% } %>
+            <% if (currentUser) { %>
+              <form method="POST" action="/cart/add/<%= product._id %>" class="d-inline">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                  <i class="fas fa-heart me-2"></i>Add to Wishlist
+                </button>
+              </form>
+            <% } else { %>
+              <a href="/login?redirect=/listings/<%= product._id %>" class="btn btn-outline-primary w-100">
+                <i class="fas fa-heart me-2"></i>Login to Add to Wishlist
+              </a>
+            <% } %>
+          <% } else { %>
+            <button class="btn btn-secondary btn-lg w-100" disabled>
+              <i class="fas fa-times-circle me-2"></i>Out of Stock
+            </button>
+          <% } %>
+        </div>
+
+        <% if(currentUser && product.seller && String(product.seller._id) === String(currentUser._id)) { %>
+        <div class="d-flex gap-3 mb-4">
+          <a href="/listings/<%= product._id %>/edit" class="btn btn-secondary px-4 py-2">Edit</a>
+          <form method="POST" action="/listings/<%= product._id %>?_method=DELETE">
+            <button type="submit" class="btn btn-danger px-4 py-2">Delete</button>
+          </form>
+        </div>
+        <% } %>
+
+        <hr class="my-3">
+
+        <% if(currentUser) { %>
+        <h5 class="mb-3">Leave a Review</h5>
+        <form action="/listings/<%= product._id %>/reviews" method="POST" class="needs-validation" novalidate>
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="star-rating">
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+            </div>
+            <input type="hidden" name="review[rating]" id="rating" required>
+            <textarea name="review[comment]" placeholder="Your comment..." rows="5" class="form-control flex-fill" required></textarea>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- All reviews section -->
+<div class="row justify-content-center mt-4 mb-5">
+  <div class="col-md-8">
+    <h4 class="mb-3">All Reviews</h4>
+    <div class="row g-3">
+      <% for(review of product.reviews) { %>
+        <div class="col-md-6">
+          <div class="card h-100 border-0">
+            <div class="card-body">
+              <p class="text-muted mb-1">By <strong><%= review.author && review.author.username ? review.author.username : 'Anonymous' %></strong></p>
+              <p class="mb-2"><%= review.comment %></p>
+              <div class="mb-2">
+                <% for(let i=1; i<=5; i++) { %>
+                  <% if(i <= review.rating) { %>
+                    <span class="star active">&#9733;</span>
+                  <% } else { %>
+                    <span class="star">&#9733;</span>
+                  <% } %>
+                <% } %>
+              </div>
+              <% if (review._id) { %>
+                <form method="POST" action="/listings/<%= product._id %>/reviews/<%= review._id %>?_method=DELETE">
+                  <button type="submit" class="btn btn-danger mt-2">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- Script for star click and buy/wishlist actions -->
+<script>
+(function () {
+  'use strict'
+  const forms = document.querySelectorAll('.needs-validation')
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+
+const stars = document.querySelectorAll('.star-rating .star');
+const ratingInput = document.getElementById('rating');
+let selectedRating = 0;
+
+function setStars(value) {
+  stars.forEach((star, index) => {
+    star.classList.toggle('active', index < value);
+  });
+}
+
+stars.forEach((star, index) => {
+  star.addEventListener('click', () => {
+    selectedRating = index + 1;
+    ratingInput.value = selectedRating;
+    setStars(selectedRating);
+  });
+  star.addEventListener('mouseover', () => setStars(index+1));
+  star.addEventListener('mouseout', () => setStars(selectedRating));
+});
+
+// Buy Now Action
+function proceedToPayment(productId, price) {
+  // Show loading state
+  const buyButton = event.target;
+  const originalText = buyButton.innerHTML;
+  buyButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+  buyButton.disabled = true;
+  
+  // Redirect to payment page immediately
+  window.location.href = `/payment/${productId}`;
+}
+
+// Add to Wishlist Action
+function addToWishlist(productId) {
+  // Show loading state
+  const wishlistButton = event.target;
+  const originalText = wishlistButton.innerHTML;
+  wishlistButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+  wishlistButton.disabled = true;
+  
+  // Submit the form
+  const form = wishlistButton.closest('form');
+  if (form) {
+    form.submit();
+  }
+}
+
+// Add click event listeners for wishlist buttons
+document.addEventListener('DOMContentLoaded', function() {
+  const wishlistForms = document.querySelectorAll('form[action*="/cart/add/"]');
+  wishlistForms.forEach(form => {
+    const button = form.querySelector('button[type="submit"]');
+    if (button) {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        addToWishlist(this.getAttribute('data-product-id'));
+      });
+    }
+  });
+});
+</script>
