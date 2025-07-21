@@ -4,6 +4,7 @@ if(process.env.NODE_ENV!="production"){
 
 
 
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -26,9 +27,10 @@ const User = require("./models/user.js");
 const MongoStore = require('connect-mongo');
 
 const app = express();
+const dburl=process.env.MONGOATLAS;
 
 // DB connect
-mongoose.connect('mongodb://127.0.0.1:27017/ShopHub')
+mongoose.connect(dburl)
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
@@ -42,21 +44,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 const sessionOptions = {
-    secret: "Mysupersecretcode",
+    secret:process.env.SECRET,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: 'mongodb://127.0.0.1:27017/ShopHub',
+        mongoUrl: dburl,
         touchAfter: 24 * 3600, // 24 hours
         crypto: {
-            secret: 'mysupersecretcode'
+            secret:process.env.SECRET
         }
     }),
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+        
     }
 };
 
