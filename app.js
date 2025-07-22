@@ -86,6 +86,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get('/',(req,res)=>{
+    res.redirect('/listings');
+})
 app.use('/listings', productsRouter);
 app.use('/listings/:id/reviews', reviewsRouter);
 app.use('/payment', paymentRouter);
